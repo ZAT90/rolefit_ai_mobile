@@ -13,7 +13,7 @@ type Props = BottomTabScreenProps<
   typeof SCREEN_NAMES.NEW_ANALYSIS
 >;
 
-export function NewAnalysisScreen({navigation}: Props) {
+export const NewAnalysisScreen = ({navigation}: Props) => {
   const appNavigation =
     navigation.getParent<NativeStackNavigationProp<AppStackParamList>>();
 
@@ -27,4 +27,4 @@ export function NewAnalysisScreen({navigation}: Props) {
       }
     />
   );
-}
+};

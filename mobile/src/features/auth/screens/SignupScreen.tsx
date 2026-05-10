@@ -23,7 +23,7 @@ type Props = NativeStackScreenProps<
   typeof SCREEN_NAMES.SIGNUP
 >;
 
-export function SignupScreen({navigation}: Props) {
+export const SignupScreen = ({navigation}: Props) => {
   const dispatch = useAppDispatch();
   const [register, {isLoading}] = useRegisterMutation();
   const [name, setName] = React.useState('');
@@ -31,7 +31,7 @@ export function SignupScreen({navigation}: Props) {
   const [password, setPassword] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
 
-  async function handleSignup() {
+  const handleSignup = async () => {
     setErrorMessage('');
 
     try {
@@ -45,7 +45,7 @@ export function SignupScreen({navigation}: Props) {
     } catch (error) {
       setErrorMessage(getApiErrorMessage(error));
     }
-  }
+  };
 
   return (
     <ScreenWrapper title="Create Account">
@@ -115,7 +115,7 @@ export function SignupScreen({navigation}: Props) {
       </KeyboardAvoidingView>
     </ScreenWrapper>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

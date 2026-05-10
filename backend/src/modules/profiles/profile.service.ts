@@ -2,7 +2,7 @@ import {prisma} from '../../config/prisma.js';
 import {ApiError} from '../../utils/ApiError.js';
 import type {UpsertProfileInput} from './profile.validation.js';
 
-export async function getProfileByUserId(userId: string) {
+export const getProfileByUserId = async (userId: string) => {
   const profile = await prisma.profile.findUnique({where: {userId}});
 
   if (!profile) {
@@ -10,12 +10,15 @@ export async function getProfileByUserId(userId: string) {
   }
 
   return profile;
-}
+};
 
-export async function upsertProfile(userId: string, input: UpsertProfileInput) {
+export const upsertProfile = async (
+  userId: string,
+  input: UpsertProfileInput,
+) => {
   return prisma.profile.upsert({
     where: {userId},
     create: {...input, userId},
     update: input,
   });
-}
+};

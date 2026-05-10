@@ -6,7 +6,7 @@ type RequestParts = {
   params?: Request['params'];
 };
 
-export function validateRequest(schema: ZodTypeAny) {
+export const validateRequest = (schema: ZodTypeAny) => {
   return (req: Request, _res: Response, next: NextFunction) => {
     const parsed = schema.parse({
       body: req.body,
@@ -19,4 +19,4 @@ export function validateRequest(schema: ZodTypeAny) {
 
     next();
   };
-}
+};

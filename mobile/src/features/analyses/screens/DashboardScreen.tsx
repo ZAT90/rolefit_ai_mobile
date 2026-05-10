@@ -9,7 +9,7 @@ type Props = BottomTabScreenProps<
   typeof SCREEN_NAMES.DASHBOARD
 >;
 
-export function DashboardScreen({navigation}: Props) {
+export const DashboardScreen = ({navigation}: Props) => {
   return (
     <PlaceholderScreen
       title="Dashboard"
@@ -20,4 +20,4 @@ export function DashboardScreen({navigation}: Props) {
       onSecondaryAction={() => navigation.navigate(SCREEN_NAMES.HISTORY)}
     />
   );
-}
+};

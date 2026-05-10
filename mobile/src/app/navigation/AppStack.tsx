@@ -9,7 +9,7 @@ import {SCREEN_NAMES} from './screenNames';
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
 
-export function AppStack() {
+export const AppStack = () => {
   const needsProfileSetup = useAppSelector(
     state => state.auth.needsProfileSetup,
   );
@@ -46,4 +46,4 @@ export function AppStack() {
       />
     </Stack.Navigator>
   );
-}
+};

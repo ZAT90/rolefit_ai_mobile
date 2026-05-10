@@ -16,10 +16,12 @@ export const analysisResponseSchema = z.object({
 
 export type ParsedAnalysisResponse = z.infer<typeof analysisResponseSchema>;
 
-export function parseAnalysisResponse(response: unknown): ParsedAnalysisResponse {
+export const parseAnalysisResponse = (
+  response: unknown,
+): ParsedAnalysisResponse => {
   if (typeof response === 'string') {
     return analysisResponseSchema.parse(JSON.parse(response));
   }
 
   return analysisResponseSchema.parse(response);
-}
+};

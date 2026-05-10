@@ -1,7 +1,7 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 
-export function SplashScreen() {
+export const SplashScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>RoleFit AI</Text>
@@ -9,7 +9,7 @@ export function SplashScreen() {
       <ActivityIndicator color="#8fb8ff" style={styles.loader} />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

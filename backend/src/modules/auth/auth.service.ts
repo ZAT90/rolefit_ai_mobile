@@ -8,15 +8,15 @@ import type {LoginInput, RegisterInput} from './auth.validation.js';
 
 const SALT_ROUNDS = 12;
 
-function signToken(userId: string) {
+const signToken = (userId: string) => {
   const options: SignOptions = {
     expiresIn: env.JWT_EXPIRES_IN as SignOptions['expiresIn'],
   };
 
   return jwt.sign({userId}, env.JWT_SECRET, options);
-}
+};
 
-export async function registerUser(input: RegisterInput) {
+export const registerUser = async (input: RegisterInput) => {
   const email = input.email.toLowerCase();
   const existingUser = await prisma.user.findUnique({where: {email}});
 
@@ -31,9 +31,9 @@ export async function registerUser(input: RegisterInput) {
   });
 
   return {user, token: signToken(user.id)};
-}
+};
 
-export async function loginUser(input: LoginInput) {
+export const loginUser = async (input: LoginInput) => {
   const user = await prisma.user.findUnique({
     where: {email: input.email.toLowerCase()},
   });
@@ -57,4 +57,4 @@ export async function loginUser(input: LoginInput) {
     },
     token: signToken(user.id),
   };
-}
+};

@@ -11,11 +11,11 @@ export type AuthenticatedRequest = Request & {
   user: JwtPayload;
 };
 
-export function authMiddleware(
+export const authMiddleware = (
   req: Request,
   _res: Response,
   next: NextFunction,
-) {
+) => {
   const authHeader = req.headers.authorization;
   const token = authHeader?.startsWith('Bearer ')
     ? authHeader.slice('Bearer '.length)
@@ -32,4 +32,4 @@ export function authMiddleware(
   } catch {
     throw new ApiError(401, 'Invalid or expired token');
   }
-}
+};

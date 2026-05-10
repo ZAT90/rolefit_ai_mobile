@@ -9,11 +9,11 @@ type ScreenWrapperProps = {
   showBackButton?: boolean;
 };
 
-export function ScreenWrapper({
+export const ScreenWrapper = ({
   children,
   title,
   showBackButton,
-}: ScreenWrapperProps) {
+}: ScreenWrapperProps) => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const canGoBack = navigation.canGoBack();
@@ -49,7 +49,7 @@ export function ScreenWrapper({
       <View style={styles.content}>{children}</View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

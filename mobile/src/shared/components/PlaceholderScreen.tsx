@@ -11,14 +11,14 @@ type PlaceholderScreenProps = {
   onSecondaryAction?: () => void;
 };
 
-export function PlaceholderScreen({
+export const PlaceholderScreen = ({
   title,
   subtitle,
   primaryActionLabel,
   onPrimaryAction,
   secondaryActionLabel,
   onSecondaryAction,
-}: PlaceholderScreenProps) {
+}: PlaceholderScreenProps) => {
   return (
     <ScreenWrapper>
       <View style={styles.content}>
@@ -42,7 +42,7 @@ export function PlaceholderScreen({
       </View>
     </ScreenWrapper>
   );
-}
+};
 
 const styles = StyleSheet.create({
   content: {

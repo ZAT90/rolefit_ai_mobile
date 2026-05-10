@@ -5,7 +5,7 @@ import {AppStack} from './AppStack';
 import {SplashScreen} from '../../features/auth/screens/SplashScreen';
 import {useAppSelector} from '../../store/hooks';
 
-export function AppNavigator() {
+export const AppNavigator = () => {
   const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
   const [isSplashDone, setIsSplashDone] = React.useState(false);
 
@@ -26,4 +26,4 @@ export function AppNavigator() {
       {isAuthenticated ? <AppStack /> : <AuthNavigator />}
     </NavigationContainer>
   );
-}
+};

@@ -23,14 +23,14 @@ type Props = NativeStackScreenProps<
   typeof SCREEN_NAMES.LOGIN
 >;
 
-export function LoginScreen({navigation}: Props) {
+export const LoginScreen = ({navigation}: Props) => {
   const dispatch = useAppDispatch();
   const [login, {isLoading}] = useLoginMutation();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
 
-  async function handleLogin() {
+  const handleLogin = async () => {
     setErrorMessage('');
 
     try {
@@ -43,7 +43,7 @@ export function LoginScreen({navigation}: Props) {
     } catch (error) {
       setErrorMessage(getApiErrorMessage(error));
     }
-  }
+  };
 
   return (
     <ScreenWrapper title="Login">
@@ -105,7 +105,7 @@ export function LoginScreen({navigation}: Props) {
       </KeyboardAvoidingView>
     </ScreenWrapper>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

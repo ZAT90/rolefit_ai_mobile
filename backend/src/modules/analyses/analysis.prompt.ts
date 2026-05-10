@@ -1,10 +1,10 @@
 import type {Profile} from '@prisma/client';
 import type {CreateAnalysisInput} from './analysis.validation.js';
 
-export function buildJobAnalysisPrompt(
+export const buildJobAnalysisPrompt = (
   profile: Profile,
   job: CreateAnalysisInput,
-) {
+) => {
   const systemPrompt = [
     'You are RoleFit AI, a career intelligence engine.',
     'Return only valid JSON that matches the requested schema.',
@@ -42,4 +42,4 @@ export function buildJobAnalysisPrompt(
   );
 
   return {systemPrompt, userPrompt};
-}
+};

@@ -9,7 +9,7 @@ type Props = NativeStackScreenProps<
   typeof SCREEN_NAMES.INTRO
 >;
 
-export function IntroScreen({navigation}: Props) {
+export const IntroScreen = ({navigation}: Props) => {
   return (
     <PlaceholderScreen
       title="AI-powered career intelligence for serious job seekers."
@@ -20,4 +20,4 @@ export function IntroScreen({navigation}: Props) {
       onSecondaryAction={() => navigation.navigate(SCREEN_NAMES.LOGIN)}
     />
   );
-}
+};

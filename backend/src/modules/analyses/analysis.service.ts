@@ -7,7 +7,10 @@ import {parseAnalysisResponse} from './analysis.parser.js';
 import {buildJobAnalysisPrompt} from './analysis.prompt.js';
 import type {CreateAnalysisInput} from './analysis.validation.js';
 
-export async function createAnalysis(userId: string, input: CreateAnalysisInput) {
+export const createAnalysis = async (
+  userId: string,
+  input: CreateAnalysisInput,
+) => {
   const profile = await getProfileByUserId(userId);
   const prompt = buildJobAnalysisPrompt(profile, input);
   const rawAiResponse = await getAiProvider().generateStructuredOutput(prompt);
@@ -21,16 +24,16 @@ export async function createAnalysis(userId: string, input: CreateAnalysisInput)
       rawAiResponse: rawAiResponse as object,
     },
   });
-}
+};
 
-export function listAnalyses(userId: string) {
+export const listAnalyses = (userId: string) => {
   return prisma.jobAnalysis.findMany({
     where: {userId},
     orderBy: {createdAt: 'desc'},
   });
-}
+};
 
-export async function getAnalysis(userId: string, id: string) {
+export const getAnalysis = async (userId: string, id: string) => {
   const analysis = await prisma.jobAnalysis.findFirst({where: {id, userId}});
 
   if (!analysis) {
@@ -38,18 +41,18 @@ export async function getAnalysis(userId: string, id: string) {
   }
 
   return analysis;
-}
+};
 
-export async function deleteAnalysis(userId: string, id: string) {
+export const deleteAnalysis = async (userId: string, id: string) => {
   await getAnalysis(userId, id);
   await prisma.jobAnalysis.delete({where: {id}});
-}
+};
 
-export async function updateAnalysisStatus(
+export const updateAnalysisStatus = async (
   userId: string,
   id: string,
   status: AnalysisStatus,
-) {
+) => {
   await getAnalysis(userId, id);
   return prisma.jobAnalysis.update({where: {id}, data: {status}});
-}
+};

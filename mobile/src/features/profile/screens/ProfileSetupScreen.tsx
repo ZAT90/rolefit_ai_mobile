@@ -3,7 +3,7 @@ import {PlaceholderScreen} from '../../../shared/components/PlaceholderScreen';
 import {useAppDispatch} from '../../../store/hooks';
 import {markProfileComplete} from '../../auth/store/authSlice';
 
-export function ProfileSetupScreen() {
+export const ProfileSetupScreen = () => {
   const dispatch = useAppDispatch();
 
   return (
@@ -14,4 +14,4 @@ export function ProfileSetupScreen() {
       onPrimaryAction={() => dispatch(markProfileComplete())}
     />
   );
-}
+};

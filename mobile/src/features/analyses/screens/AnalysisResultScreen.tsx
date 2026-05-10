@@ -9,7 +9,7 @@ type Props = NativeStackScreenProps<
   typeof SCREEN_NAMES.ANALYSIS_RESULT
 >;
 
-export function AnalysisResultScreen({navigation}: Props) {
+export const AnalysisResultScreen = ({navigation}: Props) => {
   return (
     <PlaceholderScreen
       title="Role Analysis Result"
@@ -18,4 +18,4 @@ export function AnalysisResultScreen({navigation}: Props) {
       onPrimaryAction={() => navigation.navigate(SCREEN_NAMES.MAIN)}
     />
   );
-}
+};

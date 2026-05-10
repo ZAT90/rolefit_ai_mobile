@@ -7,13 +7,13 @@ const server = app.listen(env.PORT, () => {
   logger.info(`RoleFit AI backend running on http://localhost:${env.PORT}`);
 });
 
-async function shutdown(signal: string) {
+const shutdown = async (signal: string) => {
   logger.info(`${signal} received. Shutting down backend.`);
   server.close(async () => {
     await prisma.$disconnect();
     process.exit(0);
   });
-}
+};
 
 process.on('SIGINT', () => shutdown('SIGINT'));
 process.on('SIGTERM', () => shutdown('SIGTERM'));

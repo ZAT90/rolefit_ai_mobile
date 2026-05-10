@@ -5,7 +5,7 @@ type ApiErrorShape = {
   error?: string;
 };
 
-export function getApiErrorMessage(error: unknown) {
+export const getApiErrorMessage = (error: unknown) => {
   const apiError = error as ApiErrorShape;
 
   return (
@@ -13,4 +13,4 @@ export function getApiErrorMessage(error: unknown) {
     apiError.error ??
     'Something went wrong. Please try again.'
   );
-}
+};

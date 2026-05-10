@@ -8,7 +8,7 @@ import {SCREEN_NAMES} from './screenNames';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
-export function AuthNavigator() {
+export const AuthNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -20,4 +20,4 @@ export function AuthNavigator() {
       <Stack.Screen name={SCREEN_NAMES.SIGNUP} component={SignupScreen} />
     </Stack.Navigator>
   );
-}
+};

@@ -7,7 +7,7 @@ import {AppNavigator} from './src/app/navigation/AppNavigator';
 import {SplashScreen} from './src/features/auth/screens/SplashScreen';
 import {persistor, store} from './src/store/store';
 
-function App() {
+const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={<SplashScreen />} persistor={persistor}>
@@ -18,6 +18,6 @@ function App() {
       </PersistGate>
     </Provider>
   );
-}
+};
 
 export default App;

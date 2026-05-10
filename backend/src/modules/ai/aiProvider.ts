@@ -34,10 +34,10 @@ const mockAiProvider: AiProvider = {
   },
 };
 
-export function getAiProvider(): AiProvider {
+export const getAiProvider = (): AiProvider => {
   if (env.AI_PROVIDER === 'openai') {
     return openAiProvider;
   }
 
   return mockAiProvider;
-}
+};

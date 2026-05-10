@@ -8,7 +8,7 @@ import {SCREEN_NAMES} from './screenNames';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
-export function MainTabs() {
+export const MainTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -26,4 +26,4 @@ export function MainTabs() {
       <Tab.Screen name={SCREEN_NAMES.HISTORY} component={AnalysisHistoryScreen} />
     </Tab.Navigator>
   );
-}
+};

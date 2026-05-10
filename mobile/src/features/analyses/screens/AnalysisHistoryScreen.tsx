@@ -13,7 +13,7 @@ type Props = BottomTabScreenProps<
   typeof SCREEN_NAMES.HISTORY
 >;
 
-export function AnalysisHistoryScreen({navigation}: Props) {
+export const AnalysisHistoryScreen = ({navigation}: Props) => {
   const appNavigation =
     navigation.getParent<NativeStackNavigationProp<AppStackParamList>>();
 
@@ -27,4 +27,4 @@ export function AnalysisHistoryScreen({navigation}: Props) {
       }
     />
   );
-}
+};
