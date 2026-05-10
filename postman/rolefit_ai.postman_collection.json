@@ -1,0 +1,271 @@
+{
+  "info": {
+    "name": "rolefit_ai",
+    "_postman_id": "8a4bf1de-bb02-4a1a-a8f7-rolefitai0001",
+    "description": "RoleFit AI backend API requests for local MVP testing.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST /api/auth/register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.token) pm.collectionVariables.set('token', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Zebel Al\",\n  \"email\": \"zebel.rolefit@example.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/register"
+          }
+        },
+        {
+          "name": "POST /api/auth/login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.token) pm.collectionVariables.set('token', json.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"zebel.rolefit@example.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        },
+        {
+          "name": "GET /api/auth/me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/auth/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "POST /api/profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentTitle\": \"Senior Mobile Engineer\",\n  \"yearsExperience\": 10,\n  \"coreSkills\": [\"React Native\", \"Flutter\", \"TypeScript\", \"Node.js\"],\n  \"industries\": [\"fintech\", \"insurance\", \"SaaS\"],\n  \"targetRoles\": [\"Senior React Native Engineer\", \"AI Mobile Product Engineer\"],\n  \"summary\": \"Senior Mobile Engineer with 10+ years of experience building React Native, Flutter, React.js, and Node.js products across fintech, insurance, workforce platforms, and SaaS.\",\n  \"remotePreference\": \"Remote-first roles in AI/mobile product teams\"\n}"
+            },
+            "url": "{{baseUrl}}/api/profile"
+          }
+        },
+        {
+          "name": "GET /api/profile/me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/profile/me"
+          }
+        },
+        {
+          "name": "PUT /api/profile/me",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentTitle\": \"Senior Mobile Engineer\",\n  \"yearsExperience\": 10,\n  \"coreSkills\": [\"React Native\", \"Flutter\", \"TypeScript\", \"Node.js\", \"AI API integration\"],\n  \"industries\": [\"fintech\", \"insurance\", \"SaaS\", \"AI products\"],\n  \"targetRoles\": [\"Senior React Native Engineer\", \"AI Mobile Engineer\"],\n  \"summary\": \"Senior Mobile Engineer focused on production mobile architecture, TypeScript, backend API collaboration, and AI-powered product workflows.\",\n  \"remotePreference\": \"Remote-first\"\n}"
+            },
+            "url": "{{baseUrl}}/api/profile/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analyses",
+      "item": [
+        {
+          "name": "POST /api/analyses",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.analysis?.id) pm.collectionVariables.set('analysisId', json.analysis.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jobTitle\": \"Senior React Native Engineer\",\n  \"companyName\": \"Example AI Startup\",\n  \"jobUrl\": \"https://example.com/jobs/senior-react-native-engineer\",\n  \"jobDescription\": \"We are hiring a Senior React Native Engineer to build AI-powered mobile product workflows. You will own mobile architecture, work closely with product and backend teams, integrate APIs, improve app performance, design reliable loading and error states, and help shape how AI output becomes structured user-facing decisions. Experience with TypeScript, React Native, backend collaboration, and production mobile delivery is required.\"\n}"
+            },
+            "url": "{{baseUrl}}/api/analyses"
+          }
+        },
+        {
+          "name": "GET /api/analyses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/analyses"
+          }
+        },
+        {
+          "name": "GET /api/analyses/:id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/analyses/{{analysisId}}"
+          }
+        },
+        {
+          "name": "PATCH /api/analyses/:id/status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPLIED\"\n}"
+            },
+            "url": "{{baseUrl}}/api/analyses/{{analysisId}}/status"
+          }
+        },
+        {
+          "name": "DELETE /api/analyses/:id",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/analyses/{{analysisId}}"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "analysisId",
+      "value": ""
+    }
+  ]
+}
