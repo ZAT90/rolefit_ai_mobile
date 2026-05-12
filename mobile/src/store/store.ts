@@ -1,6 +1,6 @@
-import {configureStore} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {createLogger} from 'redux-logger';
+import { configureStore } from '@reduxjs/toolkit';
+import { createLogger } from 'redux-logger';
 import {
   FLUSH,
   PAUSE,
@@ -11,9 +11,9 @@ import {
   persistReducer,
   persistStore,
 } from 'redux-persist';
-import {apiSlice} from './apiSlice';
+import type { AuthState } from '../features/auth/store/authSlice';
 import authReducer from '../features/auth/store/authSlice';
-import type {AuthState} from '../features/auth/store/authSlice';
+import { apiSlice } from './apiSlice';
 
 const logger = createLogger({
   collapsed: true,
@@ -23,7 +23,7 @@ const logger = createLogger({
 const authPersistConfig = {
   key: 'auth',
   storage: AsyncStorage,
-  whitelist: ['user', 'token', 'isAuthenticated', 'needsProfileSetup'],
+  whitelist: ['user', 'isAuthenticated', 'needsProfileSetup'],
 };
 
 export const store = configureStore({

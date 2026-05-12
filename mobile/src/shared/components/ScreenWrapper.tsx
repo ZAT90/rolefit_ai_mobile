@@ -1,18 +1,21 @@
-import React from 'react';
+import type {ReactNode} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {screenWrapperStyles as styles} from './styles/screenWrapperStyles';
 
 type ScreenWrapperProps = {
-  children: React.ReactNode;
+  children: ReactNode;
   title?: string;
   showBackButton?: boolean;
+  rightElement?: ReactNode;
 };
 
 export const ScreenWrapper = ({
   children,
   title,
   showBackButton,
+  rightElement,
 }: ScreenWrapperProps) => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
@@ -43,54 +46,10 @@ export const ScreenWrapper = ({
           <View style={styles.headerTitle} />
         )}
 
-        <View style={styles.headerSpacer} />
+        <View style={styles.headerAction}>{rightElement}</View>
       </View>
 
       <View style={styles.content}>{children}</View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#101820',
-  },
-  header: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    minHeight: 44,
-    paddingHorizontal: 16,
-  },
-  backButton: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    minHeight: 36,
-    minWidth: 72,
-  },
-  backIcon: {
-    color: '#dbeafe',
-    fontSize: 22,
-    fontWeight: '700',
-    marginRight: 6,
-  },
-  backText: {
-    color: '#dbeafe',
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  headerSpacer: {
-    minWidth: 72,
-  },
-  headerTitle: {
-    color: '#f8fafc',
-    flex: 1,
-    fontSize: 16,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-  },
-});

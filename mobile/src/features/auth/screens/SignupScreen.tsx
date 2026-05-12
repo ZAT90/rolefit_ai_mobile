@@ -1,11 +1,10 @@
-import React from 'react';
+import {useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  StyleSheet,
   Text,
   TextInput,
   View,
@@ -17,6 +16,8 @@ import {getApiErrorMessage} from '../../../shared/lib/getApiErrorMessage';
 import {ScreenWrapper} from '../../../shared/components/ScreenWrapper';
 import {useRegisterMutation} from '../services/authApi';
 import {setCredentials} from '../store/authSlice';
+import {saveToken} from '../utils/authSession';
+import {signupStyles as styles} from './styles/signupStyles';
 
 type Props = NativeStackScreenProps<
   AuthStackParamList,
@@ -26,10 +27,10 @@ type Props = NativeStackScreenProps<
 export const SignupScreen = ({navigation}: Props) => {
   const dispatch = useAppDispatch();
   const [register, {isLoading}] = useRegisterMutation();
-  const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSignup = async () => {
     setErrorMessage('');
@@ -41,6 +42,7 @@ export const SignupScreen = ({navigation}: Props) => {
         password,
       }).unwrap();
 
+      await saveToken(result.token);
       dispatch(setCredentials({...result, needsProfileSetup: true}));
     } catch (error) {
       setErrorMessage(getApiErrorMessage(error));
@@ -116,75 +118,3 @@ export const SignupScreen = ({navigation}: Props) => {
     </ScreenWrapper>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  eyebrow: {
-    color: '#8fb8ff',
-    fontSize: 14,
-    fontWeight: '700',
-    marginBottom: 16,
-    textTransform: 'uppercase',
-  },
-  title: {
-    color: '#f8fafc',
-    fontSize: 32,
-    fontWeight: '800',
-    marginBottom: 12,
-  },
-  subtitle: {
-    color: '#cbd5e1',
-    fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 28,
-  },
-  form: {
-    gap: 14,
-  },
-  input: {
-    backgroundColor: '#17212b',
-    borderColor: '#263442',
-    borderRadius: 8,
-    borderWidth: 1,
-    color: '#f8fafc',
-    fontSize: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  errorText: {
-    color: '#fca5a5',
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  primaryButton: {
-    alignItems: 'center',
-    backgroundColor: '#f8fafc',
-    borderRadius: 8,
-    minHeight: 52,
-    justifyContent: 'center',
-    marginTop: 6,
-  },
-  buttonPressed: {
-    opacity: 0.75,
-  },
-  primaryButtonText: {
-    color: '#101820',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  secondaryButton: {
-    alignItems: 'center',
-    paddingVertical: 12,
-  },
-  secondaryButtonText: {
-    color: '#dbeafe',
-    fontSize: 15,
-    fontWeight: '700',
-  },
-});

@@ -3,14 +3,12 @@ import type {AuthUser} from '../types/auth.types';
 
 export type AuthState = {
   user: AuthUser | null;
-  token: string | null;
   isAuthenticated: boolean;
   needsProfileSetup: boolean;
 };
 
 const initialState: AuthState = {
   user: null,
-  token: null,
   isAuthenticated: false,
   needsProfileSetup: false,
 };
@@ -28,7 +26,6 @@ const authSlice = createSlice({
       }>,
     ) => {
       state.user = action.payload.user;
-      state.token = action.payload.token;
       state.isAuthenticated = true;
       state.needsProfileSetup = action.payload.needsProfileSetup ?? false;
     },
@@ -37,7 +34,6 @@ const authSlice = createSlice({
     },
     logout: state => {
       state.user = null;
-      state.token = null;
       state.isAuthenticated = false;
       state.needsProfileSetup = false;
     },

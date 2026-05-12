@@ -1,7 +1,5 @@
-import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {DashboardScreen} from '../../features/analyses/screens/DashboardScreen';
-import {NewAnalysisScreen} from '../../features/analyses/screens/NewAnalysisScreen';
 import {AnalysisHistoryScreen} from '../../features/analyses/screens/AnalysisHistoryScreen';
 import {MainTabParamList} from './navigation.types';
 import {SCREEN_NAMES} from './screenNames';
@@ -19,11 +17,10 @@ export const MainTabs = () => {
       }}>
       <Tab.Screen name={SCREEN_NAMES.DASHBOARD} component={DashboardScreen} />
       <Tab.Screen
-        name={SCREEN_NAMES.NEW_ANALYSIS}
-        component={NewAnalysisScreen}
+        name={SCREEN_NAMES.HISTORY}
+        component={AnalysisHistoryScreen}
         options={{title: 'Analyze'}}
       />
-      <Tab.Screen name={SCREEN_NAMES.HISTORY} component={AnalysisHistoryScreen} />
     </Tab.Navigator>
   );
 };

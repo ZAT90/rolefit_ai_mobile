@@ -1,11 +1,10 @@
-import React from 'react';
+import {useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  StyleSheet,
   Text,
   TextInput,
   View,
@@ -17,6 +16,8 @@ import {getApiErrorMessage} from '../../../shared/lib/getApiErrorMessage';
 import {ScreenWrapper} from '../../../shared/components/ScreenWrapper';
 import {useLoginMutation} from '../services/authApi';
 import {setCredentials} from '../store/authSlice';
+import {saveToken} from '../utils/authSession';
+import {loginStyles as styles} from './styles/loginStyles';
 
 type Props = NativeStackScreenProps<
   AuthStackParamList,
@@ -26,9 +27,9 @@ type Props = NativeStackScreenProps<
 export const LoginScreen = ({navigation}: Props) => {
   const dispatch = useAppDispatch();
   const [login, {isLoading}] = useLoginMutation();
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleLogin = async () => {
     setErrorMessage('');
@@ -39,6 +40,7 @@ export const LoginScreen = ({navigation}: Props) => {
         password,
       }).unwrap();
 
+      await saveToken(result.token);
       dispatch(setCredentials(result));
     } catch (error) {
       setErrorMessage(getApiErrorMessage(error));
@@ -106,75 +108,3 @@ export const LoginScreen = ({navigation}: Props) => {
     </ScreenWrapper>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  eyebrow: {
-    color: '#8fb8ff',
-    fontSize: 14,
-    fontWeight: '700',
-    marginBottom: 16,
-    textTransform: 'uppercase',
-  },
-  title: {
-    color: '#f8fafc',
-    fontSize: 32,
-    fontWeight: '800',
-    marginBottom: 12,
-  },
-  subtitle: {
-    color: '#cbd5e1',
-    fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 28,
-  },
-  form: {
-    gap: 14,
-  },
-  input: {
-    backgroundColor: '#17212b',
-    borderColor: '#263442',
-    borderRadius: 8,
-    borderWidth: 1,
-    color: '#f8fafc',
-    fontSize: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  errorText: {
-    color: '#fca5a5',
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  primaryButton: {
-    alignItems: 'center',
-    backgroundColor: '#f8fafc',
-    borderRadius: 8,
-    minHeight: 52,
-    justifyContent: 'center',
-    marginTop: 6,
-  },
-  buttonPressed: {
-    opacity: 0.75,
-  },
-  primaryButtonText: {
-    color: '#101820',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  secondaryButton: {
-    alignItems: 'center',
-    paddingVertical: 12,
-  },
-  secondaryButtonText: {
-    color: '#dbeafe',
-    fontSize: 15,
-    fontWeight: '700',
-  },
-});
