@@ -9,11 +9,16 @@ export type AuthStackParamList = {
 export type MainTabParamList = {
   [SCREEN_NAMES.DASHBOARD]: undefined;
   [SCREEN_NAMES.HISTORY]: undefined;
+  [SCREEN_NAMES.SETTINGS]: undefined;
+};
+
+export type MainTabRouteParams = {
+  screen?: keyof MainTabParamList;
 };
 
 export type AppStackParamList = {
   [SCREEN_NAMES.PROFILE]: undefined;
-  [SCREEN_NAMES.MAIN]: undefined;
+  [SCREEN_NAMES.MAIN]: MainTabRouteParams | undefined;
   [SCREEN_NAMES.NEW_ANALYSIS]: undefined;
   [SCREEN_NAMES.ANALYSIS_RESULT]: undefined;
 };

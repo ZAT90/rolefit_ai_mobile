@@ -32,3 +32,14 @@ export type JobAnalysis = {
 export type AnalysesResponse = {
   analyses: JobAnalysis[];
 };
+
+export type AnalysisResponse = {
+  analysis: JobAnalysis;
+};
+
+export type CreateAnalysisPayload = {
+  jobTitle: string;
+  companyName?: string;
+  jobUrl?: string;
+  jobDescription: string;
+};

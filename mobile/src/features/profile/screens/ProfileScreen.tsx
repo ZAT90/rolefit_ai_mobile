@@ -1,14 +1,9 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { ChipInput } from '../../../shared/components/ChipInput';
 import { CounterInput } from '../../../shared/components/CounterInput';
+import { FixedBottomButton } from '../../../shared/components/FixedBottomButton';
 import { ScreenWrapper } from '../../../shared/components/ScreenWrapper';
 import { TextField } from '../../../shared/components/TextField';
 import { getApiErrorMessage } from '../../../shared/lib/getApiErrorMessage';
@@ -267,26 +262,16 @@ export const ProfileScreen = () => {
             value={state.remotePreference}
           />
 
-          <Pressable
-            disabled={isSavingProfile}
-            onPress={handleSaveProfile}
-            style={({ pressed }) => [
-              styles.saveButton,
-              (pressed || isSavingProfile) && styles.saveButtonPressed,
-            ]}
-          >
-            {isSavingProfile ? (
-              <ActivityIndicator color="#101820" />
-            ) : (
-              <Text style={styles.saveButtonText}>Save Profile</Text>
-            )}
-          </Pressable>
-
           {apiErrorMessage ? (
             <Text style={styles.apiErrorText}>{apiErrorMessage}</Text>
           ) : null}
         </View>
       </ScrollView>
+      <FixedBottomButton
+        isLoading={isSavingProfile}
+        label="Save Profile"
+        onPress={handleSaveProfile}
+      />
     </ScreenWrapper>
   );
 };
