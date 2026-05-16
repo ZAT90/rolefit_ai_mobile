@@ -1,4 +1,4 @@
-import {apiSlice} from '../../../store/apiSlice';
+import { apiSlice } from '../../../store/apiSlice';
 import type {
   AnalysesResponse,
   AnalysisResponse,
@@ -19,7 +19,15 @@ export const analysesApi = apiSlice.injectEndpoints({
       query: () => '/analyses',
       providesTags: ['Analysis'],
     }),
+    getAnalysisById: builder.query<AnalysisResponse, string>({
+      query: analysisId => `/analyses/${analysisId}`,
+      providesTags: ['Analysis'],
+    }),
   }),
 });
 
-export const {useCreateAnalysisMutation, useGetAnalysesQuery} = analysesApi;
+export const {
+  useCreateAnalysisMutation,
+  useGetAnalysesQuery,
+  useGetAnalysisByIdQuery,
+} = analysesApi;

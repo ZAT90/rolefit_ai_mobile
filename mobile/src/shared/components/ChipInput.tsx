@@ -15,6 +15,9 @@ type ChipInputProps = {
   onChange?: (value: string[]) => void;
   errorMessage?: string;
   isRequired?: boolean;
+  isInactive?: boolean;
+  emptyMessage?: string;
+  showRequirement?: boolean;
 };
 
 export const ChipInput = ({
@@ -24,6 +27,9 @@ export const ChipInput = ({
   onChange,
   errorMessage,
   isRequired,
+  isInactive = false,
+  emptyMessage = 'No items available',
+  showRequirement = true,
 }: ChipInputProps) => {
   const [{ draftValue, items }, dispatch] = useReducer(chipInputReducer, {
     draftValue: '',
@@ -38,6 +44,10 @@ export const ChipInput = ({
   const submitDraftValue: NonNullable<
     TextInputProps['onSubmitEditing']
   > = event => {
+    if (isInactive) {
+      return;
+    }
+
     const submittedValue = event.nativeEvent.text || draftValue;
     const nextItems = getItemsAfterSubmit(items, submittedValue);
 
@@ -52,6 +62,10 @@ export const ChipInput = ({
   };
 
   const removeItem = (item: string) => {
+    if (isInactive) {
+      return;
+    }
+
     const nextItems = getItemsAfterRemove(items, item);
 
     dispatch({ type: CHIP_INPUT_ACTIONS.REMOVE_ITEM, value: item });
@@ -62,37 +76,52 @@ export const ChipInput = ({
     <View style={styles.container}>
       <View style={styles.labelRow}>
         <Text style={styles.label}>{label}</Text>
-        <Text style={styles.requirementText}>
-          {isRequired ? 'Required' : 'Optional'}
-        </Text>
+        {showRequirement ? (
+          <Text style={styles.requirementText}>
+            {isRequired ? 'Required' : 'Optional'}
+          </Text>
+        ) : null}
       </View>
-      <View style={[styles.field, errorMessage && styles.fieldError]}>
+      <View
+        style={[
+          styles.field,
+          isInactive && styles.inactiveField,
+          errorMessage && styles.fieldError,
+        ]}
+      >
         <View style={styles.chipList}>
           {items.map(item => (
             <View key={item} style={styles.chip}>
               <Text style={styles.chipText}>{item}</Text>
-              <Pressable
-                accessibilityLabel={`Remove ${item}`}
-                hitSlop={8}
-                onPress={() => removeItem(item)}
-              >
-                <Text style={styles.removeText}>x</Text>
-              </Pressable>
+              {!isInactive ? (
+                <Pressable
+                  accessibilityLabel={`Remove ${item}`}
+                  hitSlop={8}
+                  onPress={() => removeItem(item)}
+                >
+                  <Text style={styles.removeText}>x</Text>
+                </Pressable>
+              ) : null}
             </View>
           ))}
         </View>
-        <TextInput
-          autoCapitalize="words"
-          onChangeText={value =>
-            dispatch({ type: CHIP_INPUT_ACTIONS.SET_DRAFT, value })
-          }
-          onSubmitEditing={submitDraftValue}
-          placeholder={placeholder}
-          placeholderTextColor="#64748b"
-          returnKeyType="done"
-          style={styles.input}
-          value={draftValue}
-        />
+        {items.length === 0 && isInactive ? (
+          <Text style={styles.emptyText}>{emptyMessage}</Text>
+        ) : null}
+        {!isInactive ? (
+          <TextInput
+            autoCapitalize="words"
+            onChangeText={value =>
+              dispatch({ type: CHIP_INPUT_ACTIONS.SET_DRAFT, value })
+            }
+            onSubmitEditing={submitDraftValue}
+            placeholder={placeholder}
+            placeholderTextColor="#64748b"
+            returnKeyType="done"
+            style={styles.input}
+            value={draftValue}
+          />
+        ) : null}
       </View>
       {errorMessage ? (
         <Text style={styles.errorText}>{errorMessage}</Text>

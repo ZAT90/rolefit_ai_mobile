@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const chipStyles = StyleSheet.create({
   container: {
@@ -24,6 +24,9 @@ export const chipStyles = StyleSheet.create({
   },
   fieldError: {
     borderColor: '#fca5a5',
+  },
+  inactiveField: {
+    minHeight: 58,
   },
   chipList: {
     flexDirection: 'row',
@@ -56,6 +59,11 @@ export const chipStyles = StyleSheet.create({
     fontSize: 16,
     minHeight: 40,
     paddingVertical: 8,
+  },
+  emptyText: {
+    color: '#64748b',
+    fontSize: 14,
+    lineHeight: 20,
   },
   requirementText: {
     color: '#64748b',
