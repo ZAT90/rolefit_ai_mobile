@@ -13,6 +13,7 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().default('7d'),
   AI_PROVIDER: z.enum(['mock', 'openai']).default('mock'),
   OPENAI_API_KEY: z.string().optional(),
+  OPENAI_MODEL: z.string().default('gpt-4o-mini'),
 });
 
 export const env = envSchema.parse(process.env);

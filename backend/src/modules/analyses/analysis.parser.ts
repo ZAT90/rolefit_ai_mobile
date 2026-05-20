@@ -1,4 +1,5 @@
-import {z} from 'zod';
+import { z } from "zod";
+import { ApiError } from "../../utils/ApiError";
 
 export const analysisResponseSchema = z.object({
   fitScore: z.number().int().min(0).max(100),
@@ -17,11 +18,15 @@ export const analysisResponseSchema = z.object({
 export type ParsedAnalysisResponse = z.infer<typeof analysisResponseSchema>;
 
 export const parseAnalysisResponse = (
-  response: unknown,
+  rawAiResponse: string,
 ): ParsedAnalysisResponse => {
-  if (typeof response === 'string') {
-    return analysisResponseSchema.parse(JSON.parse(response));
+  try {
+    const json = JSON.parse(rawAiResponse);
+    return analysisResponseSchema.parse(json);
+  } catch (error) {
+    throw new ApiError(
+      502,
+      "AI returned an invalid analysis response. Please try again.",
+    );
   }
-
-  return analysisResponseSchema.parse(response);
 };

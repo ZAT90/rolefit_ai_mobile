@@ -4,7 +4,5 @@ export type GenerateStructuredOutputInput = {
 };
 
 export type AiProvider = {
-  generateStructuredOutput(
-    input: GenerateStructuredOutputInput,
-  ): Promise<unknown>;
+  generateText(input: GenerateStructuredOutputInput): Promise<string>;
 };
