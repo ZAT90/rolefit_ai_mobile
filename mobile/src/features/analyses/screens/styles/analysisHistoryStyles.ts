@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const analysisHistoryStyles = StyleSheet.create({
   content: {
@@ -56,6 +56,33 @@ export const analysisHistoryStyles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 15,
   },
+  deleteAction: {
+    alignItems: 'center',
+    backgroundColor: '#dc2626',
+    borderRadius: 8,
+    gap: 4,
+    justifyContent: 'center',
+    marginBottom: 12,
+    marginLeft: 10,
+    paddingHorizontal: 18,
+    width: 92,
+  },
+  deleteActionPressed: {
+    opacity: 0.82,
+  },
+  deleteActionText: {
+    color: '#fef2f2',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  actionErrorText: {
+    color: '#fca5a5',
+    fontSize: 13,
+    lineHeight: 18,
+    marginBottom: 12,
+    textAlign: 'center',
+  },
   analysisCardPressed: {
     opacity: 0.82,
   },
@@ -74,20 +101,6 @@ export const analysisHistoryStyles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 19,
     marginBottom: 10,
-  },
-  statusBadge: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#203247',
-    borderColor: '#385679',
-    borderRadius: 8,
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
-  statusText: {
-    color: '#dbeafe',
-    fontSize: 12,
-    fontWeight: '800',
   },
   scoreBox: {
     alignItems: 'center',

@@ -3,6 +3,7 @@ import type {
   AnalysesResponse,
   AnalysisResponse,
   CreateAnalysisPayload,
+  UpdateAnalysisStatusPayload,
 } from '../types/analysis.types';
 
 export const analysesApi = apiSlice.injectEndpoints({
@@ -23,11 +24,29 @@ export const analysesApi = apiSlice.injectEndpoints({
       query: analysisId => `/analyses/${analysisId}`,
       providesTags: ['Analysis'],
     }),
+    deleteAnalysis: builder.mutation<void, string>({
+      query: analysisId => ({
+        url: `/analyses/${analysisId}`,
+        method: 'DELETE',
+      }),
+    }),
+    updateAnalysisStatus: builder.mutation<
+      AnalysisResponse,
+      UpdateAnalysisStatusPayload
+    >({
+      query: ({ analysisId, status }) => ({
+        url: `/analyses/${analysisId}/status`,
+        method: 'PATCH',
+        body: { status },
+      }),
+    }),
   }),
 });
 
 export const {
   useCreateAnalysisMutation,
+  useDeleteAnalysisMutation,
   useGetAnalysesQuery,
   useGetAnalysisByIdQuery,
+  useUpdateAnalysisStatusMutation,
 } = analysesApi;

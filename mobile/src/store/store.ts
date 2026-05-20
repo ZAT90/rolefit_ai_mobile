@@ -13,6 +13,7 @@ import {
 } from 'redux-persist';
 import type { AuthState } from '../features/auth/store/authSlice';
 import authReducer from '../features/auth/store/authSlice';
+import analysesReducer from '../features/analyses/store/analysesSlice';
 import { apiSlice } from './apiSlice';
 
 const logger = createLogger({
@@ -29,6 +30,7 @@ const authPersistConfig = {
 export const store = configureStore({
   reducer: {
     auth: persistReducer<AuthState>(authPersistConfig, authReducer),
+    analyses: analysesReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: getDefaultMiddleware => {

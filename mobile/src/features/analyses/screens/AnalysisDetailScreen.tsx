@@ -5,10 +5,18 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 import { AppStackParamList } from '../../../app/navigation/navigation.types';
 import { SCREEN_NAMES } from '../../../app/navigation/screenNames';
 import { ChipInput } from '../../../shared/components/ChipInput';
+import { FullScreenLoadingModal } from '../../../shared/components/FullScreenLoadingModal';
 import { ScreenWrapper } from '../../../shared/components/ScreenWrapper';
 import { getApiErrorMessage } from '../../../shared/lib/getApiErrorMessage';
-import { useGetAnalysisByIdQuery } from '../services/analysesApi';
-import type { JobAnalysis } from '../types/analysis.types';
+import { useAppDispatch } from '../../../store/hooks';
+import { AnalysisStatusBadge } from '../components/AnalysisStatusBadge';
+import { AnalysisStatusModal } from '../components/AnalysisStatusModal';
+import {
+  useGetAnalysisByIdQuery,
+  useUpdateAnalysisStatusMutation,
+} from '../services/analysesApi';
+import { updateAnalysisStatusInList } from '../store/analysesSlice';
+import type { AnalysisStatus, JobAnalysis } from '../types/analysis.types';
 import { analysisDetailStyles as styles } from './styles/analysisDetailStyles';
 
 type Props = NativeStackScreenProps<
@@ -26,6 +34,7 @@ type TextSectionProps = {
   value?: string | null;
   copiedSection?: string | null;
   isCopyEnabled?: boolean;
+  variant?: 'default' | 'message' | 'metadata';
   onCopy?: (label: string, value?: string | null) => void;
 };
 
@@ -34,14 +43,16 @@ type ReadOnlyChipSectionProps = {
   values?: string[] | null;
 };
 
+type ListSectionProps = {
+  label: string;
+  items?: string[] | null;
+  variant: 'numbered' | 'checklist';
+};
+
 const fallbackText = 'Not available yet.';
 
 const getSafeArray = (value?: string[] | null) => {
   return Array.isArray(value) ? value : [];
-};
-
-const formatStatus = (status?: string | null) => {
-  return status ? status.replace('_', ' ') : fallbackText;
 };
 
 const formatDate = (value?: string | null) => {
@@ -68,12 +79,19 @@ const TextSection = ({
   value,
   copiedSection,
   isCopyEnabled,
+  variant = 'default',
   onCopy,
 }: TextSectionProps) => {
   const hasCopyValue = Boolean(value?.trim());
 
   return (
-    <View style={styles.sectionCard}>
+    <View
+      style={[
+        styles.sectionCard,
+        variant === 'message' && styles.messageCard,
+        variant === 'metadata' && styles.metadataCard,
+      ]}
+    >
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionLabel}>{label}</Text>
         {isCopyEnabled ? (
@@ -110,14 +128,49 @@ const ReadOnlyChipSection = ({ label, values }: ReadOnlyChipSectionProps) => {
   );
 };
 
+const ListSection = ({ label, items, variant }: ListSectionProps) => {
+  const safeItems = getSafeArray(items);
+
+  return (
+    <View style={styles.sectionCard}>
+      <Text style={styles.sectionLabel}>{label}</Text>
+      {safeItems.length > 0 ? (
+        <View style={styles.listContent}>
+          {safeItems.map((item, index) => (
+            <View key={`${item}-${index}`} style={styles.listItemCard}>
+              <View
+                style={[
+                  styles.listMarker,
+                  variant === 'checklist' && styles.checklistMarker,
+                ]}
+              >
+                <Text style={styles.listMarkerText}>
+                  {variant === 'numbered' ? index + 1 : '✓'}
+                </Text>
+              </View>
+              <Text style={styles.listItemText}>{item}</Text>
+            </View>
+          ))}
+        </View>
+      ) : (
+        <Text style={styles.sectionText}>{fallbackText}</Text>
+      )}
+    </View>
+  );
+};
+
 const renderAnalysisContent = ({
   analysis,
   copiedSection,
+  currentStatus,
   onCopy,
+  onOpenStatusModal,
 }: {
   analysis: JobAnalysis;
   copiedSection: string | null;
+  currentStatus: AnalysisStatus;
   onCopy: TextSectionProps['onCopy'];
+  onOpenStatusModal: () => void;
 }) => {
   return (
     <>
@@ -134,9 +187,11 @@ const renderAnalysisContent = ({
           <Text style={styles.scoreLabel}>Fit Score</Text>
           <Text style={styles.scoreValue}>{analysis.fitScore ?? '--'}</Text>
         </View>
-        <View style={styles.statusBadge}>
-          <Text style={styles.statusText}>{formatStatus(analysis.status)}</Text>
-        </View>
+        <AnalysisStatusBadge
+          onPress={onOpenStatusModal}
+          status={currentStatus}
+          variant="large"
+        />
       </View>
 
       <View style={styles.statGrid}>
@@ -152,6 +207,7 @@ const renderAnalysisContent = ({
         label="Outreach Message"
         onCopy={onCopy}
         value={analysis.outreachMessage}
+        variant="message"
       />
 
       <ReadOnlyChipSection
@@ -170,11 +226,16 @@ const renderAnalysisContent = ({
         label="Seniority Signals"
         values={analysis.senioritySignals}
       />
-      <ReadOnlyChipSection
+      <ListSection
         label="Interview Questions"
-        values={analysis.interviewQuestions}
+        items={analysis.interviewQuestions}
+        variant="numbered"
       />
-      <ReadOnlyChipSection label="Next Actions" values={analysis.nextActions} />
+      <ListSection
+        label="Next Actions"
+        items={analysis.nextActions}
+        variant="checklist"
+      />
 
       <TextSection
         copiedSection={copiedSection}
@@ -182,6 +243,7 @@ const renderAnalysisContent = ({
         label="Job URL"
         onCopy={onCopy}
         value={analysis.jobUrl}
+        variant="metadata"
       />
       <TextSection
         copiedSection={copiedSection}
@@ -189,6 +251,7 @@ const renderAnalysisContent = ({
         label="Original Job Description"
         onCopy={onCopy}
         value={analysis.jobDescription}
+        variant="metadata"
       />
     </>
   );
@@ -196,8 +259,16 @@ const renderAnalysisContent = ({
 
 export const AnalysisDetailScreen = ({ route }: Props) => {
   const { analysisId } = route.params;
+  const dispatch = useAppDispatch();
   const { data, error, isLoading } = useGetAnalysisByIdQuery(analysisId);
+  const [updateAnalysisStatus, { isLoading: isUpdatingStatus }] =
+    useUpdateAnalysisStatusMutation();
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
+  const [isStatusModalVisible, setIsStatusModalVisible] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState<AnalysisStatus | null>(
+    null,
+  );
+  const [statusErrorMessage, setStatusErrorMessage] = useState('');
   const analysis = data?.analysis;
 
   const handleCopy = (label: string, value?: string | null) => {
@@ -212,14 +283,6 @@ export const AnalysisDetailScreen = ({ route }: Props) => {
   };
 
   useEffect(() => {
-    if (!data) {
-      return;
-    }
-
-    console.log('Analysis detail API result:', data);
-  }, [data]);
-
-  useEffect(() => {
     if (!copiedSection) {
       return;
     }
@@ -231,21 +294,63 @@ export const AnalysisDetailScreen = ({ route }: Props) => {
     return () => clearTimeout(timeoutId);
   }, [copiedSection]);
 
+  useEffect(() => {
+    if (analysis?.status) {
+      setCurrentStatus(analysis.status);
+    }
+  }, [analysis?.status]);
+
+  const handleOpenStatusModal = () => {
+    setStatusErrorMessage('');
+    setIsStatusModalVisible(true);
+  };
+
+  const handleCloseStatusModal = () => {
+    if (isUpdatingStatus) {
+      return;
+    }
+
+    setIsStatusModalVisible(false);
+  };
+
+  const handleSelectStatus = async (status: AnalysisStatus) => {
+    if (!analysis || currentStatus === status) {
+      setIsStatusModalVisible(false);
+      return;
+    }
+
+    setStatusErrorMessage('');
+
+    try {
+      const response = await updateAnalysisStatus({
+        analysisId: analysis.id,
+        status,
+      }).unwrap();
+
+      setCurrentStatus(response.analysis.status);
+      dispatch(
+        updateAnalysisStatusInList({
+          id: response.analysis.id,
+          status: response.analysis.status,
+        }),
+      );
+      setIsStatusModalVisible(false);
+    } catch (statusError) {
+      setStatusErrorMessage(getApiErrorMessage(statusError));
+    }
+  };
+
   return (
     <ScreenWrapper title="Analysis Detail">
+      <FullScreenLoadingModal
+        message="Pulling the saved role intelligence from the backend."
+        title="Loading analysis"
+        visible={isLoading}
+      />
       <ScrollView
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {isLoading ? (
-          <View style={styles.stateCard}>
-            <Text style={styles.stateTitle}>Loading analysis</Text>
-            <Text style={styles.stateText}>
-              Pulling the saved role intelligence from the backend.
-            </Text>
-          </View>
-        ) : null}
-
         {error ? (
           <View style={styles.stateCard}>
             <Text style={styles.stateTitle}>Could not load analysis</Text>
@@ -257,9 +362,17 @@ export const AnalysisDetailScreen = ({ route }: Props) => {
           ? renderAnalysisContent({
               analysis,
               copiedSection,
+              currentStatus: currentStatus ?? analysis.status,
               onCopy: handleCopy,
+              onOpenStatusModal: handleOpenStatusModal,
             })
           : null}
+
+        {statusErrorMessage ? (
+          <View style={styles.statusErrorCard}>
+            <Text style={styles.statusErrorText}>{statusErrorMessage}</Text>
+          </View>
+        ) : null}
 
         {!isLoading && !error && !analysis ? (
           <View style={styles.stateCard}>
@@ -270,6 +383,14 @@ export const AnalysisDetailScreen = ({ route }: Props) => {
           </View>
         ) : null}
       </ScrollView>
+
+      <AnalysisStatusModal
+        currentStatus={currentStatus ?? analysis?.status}
+        isUpdating={isUpdatingStatus}
+        onClose={handleCloseStatusModal}
+        onSelectStatus={handleSelectStatus}
+        visible={isStatusModalVisible}
+      />
     </ScreenWrapper>
   );
 };

@@ -10,6 +10,7 @@ import {
 import { AppStackParamList } from '../../../app/navigation/navigation.types';
 import { SCREEN_NAMES } from '../../../app/navigation/screenNames';
 import { FixedBottomButton } from '../../../shared/components/FixedBottomButton';
+import { FullScreenLoadingModal } from '../../../shared/components/FullScreenLoadingModal';
 import { ScreenWrapper } from '../../../shared/components/ScreenWrapper';
 import { TextField } from '../../../shared/components/TextField';
 import { getApiErrorMessage } from '../../../shared/lib/getApiErrorMessage';
@@ -59,13 +60,19 @@ export const NewAnalysisScreen = ({ navigation }: Props) => {
     }
 
     try {
-      await createAnalysis(buildAnalysisPayload(state)).unwrap();
+      const response = await createAnalysis(
+        buildAnalysisPayload(state),
+      ).unwrap();
       navigation.reset({
-        index: 0,
+        index: 1,
         routes: [
           {
             name: SCREEN_NAMES.MAIN,
             params: { screen: SCREEN_NAMES.HISTORY },
+          },
+          {
+            name: SCREEN_NAMES.ANALYSIS_DETAIL,
+            params: { analysisId: response.analysis.id },
           },
         ],
       });
@@ -76,6 +83,11 @@ export const NewAnalysisScreen = ({ navigation }: Props) => {
 
   return (
     <ScreenWrapper title="New Analysis">
+      <FullScreenLoadingModal
+        message="Comparing this role against your candidate profile and preparing structured career intelligence."
+        title="Analyzing role fit"
+        visible={isLoading}
+      />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.keyboardView}
@@ -168,21 +180,6 @@ export const NewAnalysisScreen = ({ navigation }: Props) => {
             {apiErrorMessage ? (
               <Text style={styles.errorText}>{apiErrorMessage}</Text>
             ) : null}
-
-            {/* <Pressable
-              disabled={isLoading}
-              onPress={handleAnalyzeRole}
-              style={({ pressed }) => [
-                styles.primaryButton,
-                (pressed || isLoading) && styles.primaryButtonPressed,
-              ]}
-            >
-              {isLoading ? (
-                <ActivityIndicator color="#101820" />
-              ) : (
-                <Text style={styles.primaryButtonText}>Analyze Role</Text>
-              )}
-            </Pressable> */}
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

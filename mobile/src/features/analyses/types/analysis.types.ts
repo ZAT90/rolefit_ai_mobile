@@ -43,3 +43,8 @@ export type CreateAnalysisPayload = {
   jobUrl?: string;
   jobDescription: string;
 };
+
+export type UpdateAnalysisStatusPayload = {
+  analysisId: string;
+  status: AnalysisStatus;
+};

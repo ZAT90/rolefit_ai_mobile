@@ -50,20 +50,6 @@ export const analysisDetailStyles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: 54,
   },
-  statusBadge: {
-    backgroundColor: '#223246',
-    borderColor: '#334965',
-    borderRadius: 999,
-    borderWidth: 1,
-    paddingHorizontal: 14,
-    paddingVertical: 9,
-  },
-  statusText: {
-    color: '#dbeafe',
-    fontSize: 13,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-  },
   statGrid: {
     flexDirection: 'row',
     gap: 12,
@@ -97,6 +83,13 @@ export const analysisDetailStyles = StyleSheet.create({
     borderWidth: 1,
     gap: 10,
     padding: 14,
+  },
+  messageCard: {
+    backgroundColor: '#172334',
+    borderColor: '#3b5574',
+  },
+  metadataCard: {
+    backgroundColor: '#141f29',
   },
   sectionHeader: {
     alignItems: 'center',
@@ -134,6 +127,44 @@ export const analysisDetailStyles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
   },
+  listContent: {
+    gap: 10,
+  },
+  listItemCard: {
+    alignItems: 'flex-start',
+    backgroundColor: '#111c27',
+    borderColor: '#263442',
+    borderRadius: 10,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: 12,
+    padding: 12,
+  },
+  listMarker: {
+    alignItems: 'center',
+    backgroundColor: '#223246',
+    borderColor: '#334965',
+    borderRadius: 999,
+    borderWidth: 1,
+    height: 28,
+    justifyContent: 'center',
+    width: 28,
+  },
+  checklistMarker: {
+    backgroundColor: '#17352d',
+    borderColor: '#2f735f',
+  },
+  listMarkerText: {
+    color: '#dbeafe',
+    fontSize: 12,
+    fontWeight: '900',
+  },
+  listItemText: {
+    color: '#f8fafc',
+    flex: 1,
+    fontSize: 15,
+    lineHeight: 22,
+  },
   stateCard: {
     alignItems: 'center',
     backgroundColor: '#17212b',
@@ -151,6 +182,20 @@ export const analysisDetailStyles = StyleSheet.create({
   stateText: {
     color: '#94a3b8',
     fontSize: 14,
+    lineHeight: 20,
+    textAlign: 'center',
+  },
+  statusErrorCard: {
+    backgroundColor: '#331b1b',
+    borderColor: '#7f1d1d',
+    borderRadius: 10,
+    borderWidth: 1,
+    padding: 12,
+  },
+  statusErrorText: {
+    color: '#fca5a5',
+    fontSize: 14,
+    fontWeight: '700',
     lineHeight: 20,
     textAlign: 'center',
   },
