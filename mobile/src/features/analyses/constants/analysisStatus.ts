@@ -44,11 +44,50 @@ export const analysisStatusOptions: AnalysisStatusOption[] = [
     borderColor: '#16a34a',
     textColor: '#dcfce7',
   },
+  {
+    value: 'GHOSTED',
+    label: 'Ghosted',
+    backgroundColor: '#334155',
+    borderColor: '#64748b',
+    textColor: '#e2e8f0',
+  },
 ];
+
+export const allowedStatusTransitions: Record<
+  AnalysisStatus,
+  AnalysisStatus[]
+> = {
+  SAVED: ['APPLIED', 'INTERVIEWING', 'REJECTED', 'OFFER', 'GHOSTED'],
+  APPLIED: ['INTERVIEWING', 'REJECTED', 'OFFER', 'GHOSTED'],
+  INTERVIEWING: ['REJECTED', 'OFFER', 'GHOSTED'],
+  REJECTED: [],
+  OFFER: [],
+  GHOSTED: [],
+};
 
 export const getAnalysisStatusOption = (status: AnalysisStatus) => {
   return (
     analysisStatusOptions.find(option => option.value === status) ??
     analysisStatusOptions[0]
   );
+};
+
+export const getVisibleAnalysisStatusOptions = (status?: AnalysisStatus) => {
+  if (!status) {
+    return analysisStatusOptions;
+  }
+
+  const visibleStatusValues = [status, ...allowedStatusTransitions[status]];
+
+  return analysisStatusOptions.filter(option =>
+    visibleStatusValues.includes(option.value),
+  );
+};
+
+export const isFinalAnalysisStatus = (status?: AnalysisStatus) => {
+  if (!status) {
+    return false;
+  }
+
+  return allowedStatusTransitions[status].length === 0;
 };

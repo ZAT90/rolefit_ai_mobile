@@ -11,11 +11,12 @@ import { getApiErrorMessage } from '../../../shared/lib/getApiErrorMessage';
 import { useAppDispatch } from '../../../store/hooks';
 import { AnalysisStatusBadge } from '../components/AnalysisStatusBadge';
 import { AnalysisStatusModal } from '../components/AnalysisStatusModal';
+import { isFinalAnalysisStatus } from '../constants/analysisStatus';
 import {
   useGetAnalysisByIdQuery,
   useUpdateAnalysisStatusMutation,
 } from '../services/analysesApi';
-import { updateAnalysisStatusInList } from '../store/analysesSlice';
+import { updateAnalysisInList } from '../store/analysesSlice';
 import type { AnalysisStatus, JobAnalysis } from '../types/analysis.types';
 import { analysisDetailStyles as styles } from './styles/analysisDetailStyles';
 
@@ -188,7 +189,9 @@ const renderAnalysisContent = ({
           <Text style={styles.scoreValue}>{analysis.fitScore ?? '--'}</Text>
         </View>
         <AnalysisStatusBadge
-          onPress={onOpenStatusModal}
+          onPress={
+            isFinalAnalysisStatus(currentStatus) ? undefined : onOpenStatusModal
+          }
           status={currentStatus}
           variant="large"
         />
@@ -301,6 +304,10 @@ export const AnalysisDetailScreen = ({ route }: Props) => {
   }, [analysis?.status]);
 
   const handleOpenStatusModal = () => {
+    if (isFinalAnalysisStatus(currentStatus ?? analysis?.status)) {
+      return;
+    }
+
     setStatusErrorMessage('');
     setIsStatusModalVisible(true);
   };
@@ -328,12 +335,7 @@ export const AnalysisDetailScreen = ({ route }: Props) => {
       }).unwrap();
 
       setCurrentStatus(response.analysis.status);
-      dispatch(
-        updateAnalysisStatusInList({
-          id: response.analysis.id,
-          status: response.analysis.status,
-        }),
-      );
+      dispatch(updateAnalysisInList(response.analysis));
       setIsStatusModalVisible(false);
     } catch (statusError) {
       setStatusErrorMessage(getApiErrorMessage(statusError));

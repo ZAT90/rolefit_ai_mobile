@@ -36,12 +36,22 @@ const analysesSlice = createSlice({
         };
       });
     },
+    updateAnalysisInList: (state, action: PayloadAction<JobAnalysis>) => {
+      state.analysesList = state.analysesList.map(analysis => {
+        if (analysis.id !== action.payload.id) {
+          return analysis;
+        }
+
+        return action.payload;
+      });
+    },
   },
 });
 
 export const {
   removeAnalysisFromList,
   setAnalysesList,
+  updateAnalysisInList,
   updateAnalysisStatusInList,
 } = analysesSlice.actions;
 

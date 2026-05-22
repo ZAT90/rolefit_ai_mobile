@@ -1,5 +1,5 @@
 import { ActivityIndicator, Modal, Pressable, Text, View } from 'react-native';
-import { analysisStatusOptions } from '../constants/analysisStatus';
+import { getVisibleAnalysisStatusOptions } from '../constants/analysisStatus';
 import type { AnalysisStatus } from '../types/analysis.types';
 import { analysisStatusModalStyles as styles } from './styles/analysisStatusModalStyles';
 
@@ -18,6 +18,8 @@ export const AnalysisStatusModal = ({
   onSelectStatus,
   visible,
 }: AnalysisStatusModalProps) => {
+  const visibleStatusOptions = getVisibleAnalysisStatusOptions(currentStatus);
+
   return (
     <Modal
       animationType="fade"
@@ -34,7 +36,7 @@ export const AnalysisStatusModal = ({
           </Text>
 
           <View style={styles.options}>
-            {analysisStatusOptions.map(option => {
+            {visibleStatusOptions.map(option => {
               const isSelected = option.value === currentStatus;
 
               return (

@@ -3,7 +3,8 @@ export type AnalysisStatus =
   | 'APPLIED'
   | 'INTERVIEWING'
   | 'REJECTED'
-  | 'OFFER';
+  | 'OFFER'
+  | 'GHOSTED';
 
 export type JobAnalysis = {
   id: string;

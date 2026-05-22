@@ -209,6 +209,56 @@ The schema is defined in:
 backend/prisma/schema.prisma
 ```
 
+### Prisma Migration Workflow
+
+Whenever `backend/prisma/schema.prisma` changes, the database and generated Prisma client must be updated too.
+
+Use this flow for schema changes such as:
+
+- adding a new model/table
+- adding or removing a column
+- changing a relation
+- adding a new enum value
+- changing defaults or constraints
+
+From the backend folder:
+
+```bash
+cd backend
+npx prisma migrate dev --name descriptive_migration_name
+npx prisma generate
+npm run typecheck
+npm run build
+```
+
+Example migration names:
+
+```bash
+npx prisma migrate dev --name add_recruiter_contacts
+npx prisma migrate dev --name add_ghosted_analysis_status
+npx prisma migrate dev --name add_analysis_stats
+```
+
+What each step does:
+
+- `schema.prisma` defines the desired data model.
+- `prisma migrate dev` creates a migration file and applies it to the local database.
+- `prisma generate` updates the generated Prisma Client and TypeScript types.
+- `typecheck` and `build` confirm the backend code still matches the schema.
+
+If a migration SQL file is created manually, apply it and mark it as applied:
+
+```bash
+npx prisma db execute --file prisma/migrations/<migration_folder>/migration.sql --schema prisma/schema.prisma
+npx prisma migrate resolve --applied <migration_folder>
+```
+
+For local development, make sure PostgreSQL is running before applying migrations:
+
+```bash
+pg_isready -h localhost -p 5432
+```
+
 ## API Endpoints
 
 ### Auth

@@ -7,6 +7,15 @@ import { parseAnalysisResponse } from "./analysis.parser.js";
 import { buildJobAnalysisPrompt } from "./analysis.prompt.js";
 import type { CreateAnalysisInput } from "./analysis.validation.js";
 
+const allowedStatusTransitions: Record<AnalysisStatus, AnalysisStatus[]> = {
+  SAVED: ["APPLIED", "INTERVIEWING", "REJECTED", "OFFER", "GHOSTED"],
+  APPLIED: ["INTERVIEWING", "REJECTED", "OFFER", "GHOSTED"],
+  INTERVIEWING: ["REJECTED", "OFFER", "GHOSTED"],
+  REJECTED: [],
+  OFFER: [],
+  GHOSTED: [],
+};
+
 export const createAnalysis = async (
   userId: string,
   input: CreateAnalysisInput,
@@ -57,6 +66,10 @@ export const updateAnalysisStatus = async (
   id: string,
   status: AnalysisStatus,
 ) => {
-  await getAnalysis(userId, id);
+  const analysis = await getAnalysis(userId, id);
+  const allowedNextStatuses = allowedStatusTransitions[analysis.status];
+  if (!allowedNextStatuses.includes(status)) {
+    throw new ApiError(400, "Invalid analysis status transition");
+  }
   return prisma.jobAnalysis.update({ where: { id }, data: { status } });
 };

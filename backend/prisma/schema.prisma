@@ -64,4 +64,5 @@ enum AnalysisStatus {
   INTERVIEWING
   REJECTED
   OFFER
+  GHOSTED
 }
