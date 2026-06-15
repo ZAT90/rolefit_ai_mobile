@@ -1,6 +1,9 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useCallback, useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
+import { AppStackParamList } from '../../../app/navigation/navigation.types';
+import { SCREEN_NAMES } from '../../../app/navigation/screenNames';
 import { ChipInput } from '../../../shared/components/ChipInput';
 import { CounterInput } from '../../../shared/components/CounterInput';
 import { FixedBottomButton } from '../../../shared/components/FixedBottomButton';
@@ -51,7 +54,8 @@ const mapProfileToFormState = (profile: Profile): ProfileFormState => {
 };
 
 export const ProfileScreen = () => {
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AppStackParamList>>();
   const appDispatch = useAppDispatch();
   const needsProfileSetup = useAppSelector(
     reduxState => reduxState.auth.needsProfileSetup,
@@ -123,7 +127,15 @@ export const ProfileScreen = () => {
 
       appDispatch(markProfileComplete());
 
-      if (!needsProfileSetup && navigation.canGoBack()) {
+      if (needsProfileSetup) {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: SCREEN_NAMES.MAIN }],
+        });
+        return;
+      }
+
+      if (navigation.canGoBack()) {
         navigation.goBack();
       }
     } catch (error) {

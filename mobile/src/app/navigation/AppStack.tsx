@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AnalysisDetailScreen } from '../../features/analyses/screens/AnalysisDetailScreen';
 import { NewAnalysisScreen } from '../../features/analyses/screens/NewAnalysisScreen';
+import { TopMissingSkillsScreen } from '../../features/analyses/screens/TopMissingSkillsScreen';
 import { ProfileScreen } from '../../features/profile/screens/ProfileScreen';
 import { useAppSelector } from '../../store/hooks';
 import { MainTabs } from './MainTabs';
@@ -17,6 +18,7 @@ export const AppStack = () => {
   if (needsProfileSetup) {
     return (
       <Stack.Navigator
+        key="profile-setup-stack"
         screenOptions={{
           contentStyle: { backgroundColor: '#101820' },
           headerShown: false,
@@ -29,6 +31,7 @@ export const AppStack = () => {
 
   return (
     <Stack.Navigator
+      key="main-app-stack"
       screenOptions={{
         contentStyle: { backgroundColor: '#101820' },
         headerShown: false,
@@ -43,6 +46,10 @@ export const AppStack = () => {
       <Stack.Screen
         name={SCREEN_NAMES.ANALYSIS_DETAIL}
         component={AnalysisDetailScreen}
+      />
+      <Stack.Screen
+        name={SCREEN_NAMES.TOP_MISSING_SKILLS}
+        component={TopMissingSkillsScreen}
       />
     </Stack.Navigator>
   );

@@ -9,4 +9,5 @@ export const SCREEN_NAMES = {
   DASHBOARD: 'Dashboard',
   NEW_ANALYSIS: 'NewAnalysis',
   HISTORY: 'History',
+  TOP_MISSING_SKILLS: 'TopMissingSkills',
 } as const;

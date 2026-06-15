@@ -1,5 +1,5 @@
-import {useState} from 'react';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -9,24 +9,24 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {AuthStackParamList} from '../../../app/navigation/navigation.types';
-import {SCREEN_NAMES} from '../../../app/navigation/screenNames';
-import {useAppDispatch} from '../../../store/hooks';
-import {getApiErrorMessage} from '../../../shared/lib/getApiErrorMessage';
-import {ScreenWrapper} from '../../../shared/components/ScreenWrapper';
-import {useRegisterMutation} from '../services/authApi';
-import {setCredentials} from '../store/authSlice';
-import {saveToken} from '../utils/authSession';
-import {signupStyles as styles} from './styles/signupStyles';
+import { AuthStackParamList } from '../../../app/navigation/navigation.types';
+import { SCREEN_NAMES } from '../../../app/navigation/screenNames';
+import { ScreenWrapper } from '../../../shared/components/ScreenWrapper';
+import { getApiErrorMessage } from '../../../shared/lib/getApiErrorMessage';
+import { useAppDispatch } from '../../../store/hooks';
+import { useRegisterMutation } from '../services/authApi';
+import { setCredentials } from '../store/authSlice';
+import { saveToken } from '../utils/authSession';
+import { signupStyles as styles } from './styles/signupStyles';
 
 type Props = NativeStackScreenProps<
   AuthStackParamList,
   typeof SCREEN_NAMES.SIGNUP
 >;
 
-export const SignupScreen = ({navigation}: Props) => {
+export const SignupScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
-  const [register, {isLoading}] = useRegisterMutation();
+  const [register, { isLoading }] = useRegisterMutation();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -43,7 +43,7 @@ export const SignupScreen = ({navigation}: Props) => {
       }).unwrap();
 
       await saveToken(result.token);
-      dispatch(setCredentials({...result, needsProfileSetup: true}));
+      dispatch(setCredentials({ ...result, needsProfileSetup: true }));
     } catch (error) {
       setErrorMessage(getApiErrorMessage(error));
     }
@@ -53,7 +53,8 @@ export const SignupScreen = ({navigation}: Props) => {
     <ScreenWrapper title="Create Account">
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.container}>
+        style={styles.container}
+      >
         <View style={styles.content}>
           <Text style={styles.eyebrow}>RoleFit AI</Text>
           <Text style={styles.title}>Create account</Text>
@@ -96,10 +97,11 @@ export const SignupScreen = ({navigation}: Props) => {
             <Pressable
               disabled={isLoading}
               onPress={handleSignup}
-              style={({pressed}) => [
+              style={({ pressed }) => [
                 styles.primaryButton,
                 (pressed || isLoading) && styles.buttonPressed,
-              ]}>
+              ]}
+            >
               {isLoading ? (
                 <ActivityIndicator color="#101820" />
               ) : (
@@ -109,7 +111,8 @@ export const SignupScreen = ({navigation}: Props) => {
 
             <Pressable
               onPress={() => navigation.navigate(SCREEN_NAMES.LOGIN)}
-              style={styles.secondaryButton}>
+              style={styles.secondaryButton}
+            >
               <Text style={styles.secondaryButtonText}>Back to login</Text>
             </Pressable>
           </View>

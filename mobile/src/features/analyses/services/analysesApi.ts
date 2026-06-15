@@ -3,6 +3,7 @@ import type {
   AnalysesResponse,
   AnalysisResponse,
   CreateAnalysisPayload,
+  MissingSkillsResponse,
   UpdateAnalysisStatusPayload,
 } from '../types/analysis.types';
 
@@ -22,6 +23,10 @@ export const analysesApi = apiSlice.injectEndpoints({
     }),
     getAnalysisById: builder.query<AnalysisResponse, string>({
       query: analysisId => `/analyses/${analysisId}`,
+      providesTags: ['Analysis'],
+    }),
+    getMissingSkills: builder.query<MissingSkillsResponse, void>({
+      query: () => '/analyses/missingskills',
       providesTags: ['Analysis'],
     }),
     deleteAnalysis: builder.mutation<void, string>({
@@ -48,5 +53,6 @@ export const {
   useDeleteAnalysisMutation,
   useGetAnalysesQuery,
   useGetAnalysisByIdQuery,
+  useGetMissingSkillsQuery,
   useUpdateAnalysisStatusMutation,
 } = analysesApi;

@@ -34,6 +34,15 @@ export type AnalysesResponse = {
   analyses: JobAnalysis[];
 };
 
+export type MissingSkillInsight = {
+  skill: string;
+  count: number;
+};
+
+export type MissingSkillsResponse = {
+  missingSkills: MissingSkillInsight[];
+};
+
 export type AnalysisResponse = {
   analysis: JobAnalysis;
 };

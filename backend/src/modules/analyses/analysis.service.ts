@@ -73,3 +73,29 @@ export const updateAnalysisStatus = async (
   }
   return prisma.jobAnalysis.update({ where: { id }, data: { status } });
 };
+
+export const getAnalysesMissingSkills = async (userId: string) => {
+  const analyses = await prisma.jobAnalysis.findMany({
+    where: { userId },
+    select: { missingSkills: true },
+  });
+
+  const missingSkillCounts: Record<string, number> = {};
+  analyses.forEach((analysis) => {
+    analysis.missingSkills.forEach((skill) => {
+      const missingSkill = skill.trim();
+
+      if (!missingSkill) {
+        return;
+      }
+
+      missingSkillCounts[missingSkill] =
+        (missingSkillCounts[missingSkill] ?? 0) + 1;
+    });
+  });
+
+  return Object.entries(missingSkillCounts)
+    .map(([skill, count]) => ({ skill, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
+};

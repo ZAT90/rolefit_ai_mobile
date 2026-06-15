@@ -25,4 +25,5 @@ export type AppStackParamList = {
   [SCREEN_NAMES.MAIN]: MainTabRouteParams | undefined;
   [SCREEN_NAMES.NEW_ANALYSIS]: undefined;
   [SCREEN_NAMES.ANALYSIS_DETAIL]: AnalysisDetailRouteParams;
+  [SCREEN_NAMES.TOP_MISSING_SKILLS]: undefined;
 };

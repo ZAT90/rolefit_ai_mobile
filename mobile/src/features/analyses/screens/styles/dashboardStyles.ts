@@ -1,8 +1,8 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const dashboardStyles = StyleSheet.create({
   content: {
-    flex: 1,
+    paddingBottom: 34,
     paddingTop: 18,
   },
   profileButton: {
@@ -77,6 +77,65 @@ export const dashboardStyles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
   },
+  stateBox: {
+    backgroundColor: '#17212b',
+    borderColor: '#263442',
+    borderRadius: 8,
+    borderWidth: 1,
+    marginBottom: 18,
+    padding: 16,
+  },
+  stateTitle: {
+    color: '#f8fafc',
+    fontSize: 16,
+    fontWeight: '800',
+    marginBottom: 6,
+  },
+  stateText: {
+    color: '#94a3b8',
+    fontSize: 14,
+    lineHeight: 21,
+  },
+  inlineButton: {
+    alignSelf: 'flex-start',
+    marginTop: 12,
+    paddingVertical: 6,
+  },
+  inlineButtonText: {
+    color: '#dbeafe',
+    fontSize: 14,
+    fontWeight: '800',
+  },
+  insightsCard: {
+    alignItems: 'center',
+    backgroundColor: '#172334',
+    borderColor: '#3b5574',
+    borderRadius: 8,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 18,
+    padding: 16,
+  },
+  insightsIconBox: {
+    alignItems: 'center',
+    backgroundColor: '#223246',
+    borderColor: '#334965',
+    borderRadius: 8,
+    borderWidth: 1,
+    height: 44,
+    justifyContent: 'center',
+    width: 44,
+  },
+  insightsTextBox: {
+    flex: 1,
+    minWidth: 0,
+  },
+  insightsText: {
+    color: '#94a3b8',
+    fontSize: 14,
+    lineHeight: 20,
+  },
   section: {
     backgroundColor: '#17212b',
     borderColor: '#263442',
@@ -85,44 +144,72 @@ export const dashboardStyles = StyleSheet.create({
     marginBottom: 22,
     padding: 16,
   },
+  sectionHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
   sectionTitle: {
     color: '#f8fafc',
     fontSize: 16,
     fontWeight: '800',
-    marginBottom: 8,
+  },
+  syncText: {
+    color: '#8fb8ff',
+    fontSize: 12,
+    fontWeight: '800',
+    textTransform: 'uppercase',
   },
   emptyText: {
     color: '#94a3b8',
     fontSize: 14,
     lineHeight: 21,
   },
-  actions: {
+  recentList: {
     gap: 12,
   },
-  primaryButton: {
+  recentCard: {
     alignItems: 'center',
-    backgroundColor: '#f8fafc',
-    borderRadius: 8,
-    minHeight: 52,
-    justifyContent: 'center',
-  },
-  primaryButtonText: {
-    color: '#101820',
-    fontSize: 16,
-    fontWeight: '800',
-  },
-  secondaryButton: {
-    alignItems: 'center',
-    borderColor: '#334965',
+    backgroundColor: '#111c27',
+    borderColor: '#263442',
     borderRadius: 8,
     borderWidth: 1,
-    minHeight: 52,
-    justifyContent: 'center',
+    flexDirection: 'row',
+    gap: 12,
+    padding: 14,
   },
-  secondaryButtonText: {
-    color: '#dbeafe',
+  recentInfo: {
+    flex: 1,
+    minWidth: 0,
+  },
+  recentTitle: {
+    color: '#f8fafc',
     fontSize: 16,
     fontWeight: '800',
+    marginBottom: 5,
+  },
+  recentCompany: {
+    color: '#94a3b8',
+    fontSize: 13,
+    fontWeight: '700',
+    marginBottom: 10,
+  },
+  recentScoreBox: {
+    alignItems: 'center',
+    minWidth: 52,
+  },
+  recentScore: {
+    color: '#f8fafc',
+    fontSize: 24,
+    fontWeight: '900',
+  },
+  recentScoreLabel: {
+    color: '#64748b',
+    fontSize: 11,
+    fontWeight: '800',
+    marginTop: 2,
+    textTransform: 'uppercase',
   },
   buttonPressed: {
     opacity: 0.75,
