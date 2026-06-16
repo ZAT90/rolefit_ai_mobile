@@ -79,7 +79,7 @@ export const TopMissingSkillsScreen = () => {
         <View style={styles.noteCard}>
           <Text style={styles.noteTitle}>How this is calculated</Text>
           <Text style={styles.noteText}>
-            The backend counts repeated missing skills from saved analyses and
+            RoleFit AI counts repeated missing skills from saved analyses and
             returns the top five results.
           </Text>
         </View>

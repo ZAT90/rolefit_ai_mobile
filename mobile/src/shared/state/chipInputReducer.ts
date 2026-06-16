@@ -1,4 +1,4 @@
-import {CHIP_INPUT_ACTIONS} from './chipInputActionTypes';
+import { CHIP_INPUT_ACTIONS } from './chipInputActionTypes';
 
 export type ChipInputState = {
   draftValue: string;
@@ -83,8 +83,8 @@ export const chipInputReducer = (
 
     case CHIP_INPUT_ACTIONS.SET_ITEMS:
       return {
+        ...state,
         draftValue: '',
-        ignoredSubmittedValue: null,
         items: action.value,
       };
 

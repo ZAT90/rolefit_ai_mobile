@@ -23,7 +23,9 @@ export const analysesApi = apiSlice.injectEndpoints({
     }),
     getAnalysisById: builder.query<AnalysisResponse, string>({
       query: analysisId => `/analyses/${analysisId}`,
-      providesTags: ['Analysis'],
+      providesTags: (_result, _error, analysisId) => [
+        { type: 'Analysis', id: analysisId },
+      ],
     }),
     getMissingSkills: builder.query<MissingSkillsResponse, void>({
       query: () => '/analyses/missingskills',
@@ -44,6 +46,9 @@ export const analysesApi = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: { status },
       }),
+      invalidatesTags: (_result, _error, { analysisId }) => [
+        { type: 'Analysis', id: analysisId },
+      ],
     }),
   }),
 });

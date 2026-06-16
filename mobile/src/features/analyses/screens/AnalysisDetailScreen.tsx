@@ -333,9 +333,10 @@ export const AnalysisDetailScreen = ({ route }: Props) => {
         analysisId: analysis.id,
         status,
       }).unwrap();
+      const updatedAnalysis = response.analysis;
 
-      setCurrentStatus(response.analysis.status);
-      dispatch(updateAnalysisInList(response.analysis));
+      setCurrentStatus(updatedAnalysis.status);
+      dispatch(updateAnalysisInList(updatedAnalysis));
       setIsStatusModalVisible(false);
     } catch (statusError) {
       setStatusErrorMessage(getApiErrorMessage(statusError));
