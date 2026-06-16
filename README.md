@@ -1,309 +1,29 @@
 # RoleFit AI
 
-RoleFit AI is a mobile career intelligence platform that turns raw job descriptions into structured role-fit analysis, skill-gap insights, interview preparation, and recruiter outreach strategy.
+<p align="center">
+  <strong>Mobile career intelligence for serious job seekers.</strong>
+</p>
 
-The goal of this project is to demonstrate a production-style AI product workflow, not a basic chatbot or resume checker. The product is designed around structured mobile decision cards, backend-owned AI orchestration, and persistent user history.
+<p align="center">
+  RoleFit AI turns raw job descriptions into structured role-fit analysis, skill-gap insights, interview preparation, and recruiter outreach strategy.
+</p>
 
-## Positioning
+<p align="center">
+  <img alt="React Native" src="https://img.shields.io/badge/React_Native-0B1220?style=for-the-badge&logo=react&logoColor=61DAFB" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-1E3A8A?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-14532D?style=for-the-badge&logo=nodedotjs&logoColor=white" />
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-1E40AF?style=for-the-badge&logo=postgresql&logoColor=white" />
+  <img alt="Prisma" src="https://img.shields.io/badge/Prisma-111827?style=for-the-badge&logo=prisma&logoColor=white" />
+  <img alt="OpenAI" src="https://img.shields.io/badge/AI_Workflow-7C3AED?style=for-the-badge&logo=openai&logoColor=white" />
+</p>
 
-RoleFit AI is built to show senior-level execution across:
+---
 
-- React Native mobile architecture
-- TypeScript-first full-stack development
-- Redux Toolkit state management
-- RTK Query API orchestration
-- Node.js and Express backend design
-- PostgreSQL persistence with Prisma
-- JWT authentication
-- AI provider abstraction and structured response parsing
-- Product-focused AI workflows
+## Product Vision
 
-The portfolio message is:
+Job seekers often paste job descriptions into AI tools and receive a long, generic response. RoleFit AI turns that habit into a product workflow.
 
-> I build AI-powered product workflows, not AI wrappers.
-
-## Monorepo Structure
-
-```txt
-rolefit_ai_mobile/
-  mobile/      React Native app
-  backend/     Express API, Prisma, AI workflow
-  postman/     Local API testing collection
-```
-
-## Current MVP Status
-
-Implemented:
-
-- Mobile project scaffold
-- Backend project scaffold
-- PostgreSQL and Prisma schema
-- JWT register/login backend flow
-- Postman collection for API testing
-- Redux Toolkit store
-- RTK Query auth API slice
-- Persisted auth state with AsyncStorage and redux-persist
-- Redux logger in development
-- Splash/auth/app stack navigation based on Redux auth state
-- Centralized route name constants
-- Custom `ScreenWrapper` with navigation-based back button
-- Mobile login and signup screens wired to backend auth
-
-Next:
-
-- Candidate profile form integration
-- Analysis submission screen integration
-- Structured result cards
-- History/dashboard API integration
-- Real AI provider implementation
-
-## Tech Stack
-
-### Mobile
-
-- React Native
-- TypeScript
-- React Navigation
-- Redux Toolkit
-- RTK Query
-- redux-persist
-- redux-logger
-- AsyncStorage
-
-### Backend
-
-- Node.js
-- Express
-- TypeScript
-- PostgreSQL
-- Prisma
-- JWT
-- Bcrypt
-- Zod
-
-## Mobile Architecture
-
-```txt
-mobile/src/
-  app/
-    navigation/
-      AppNavigator.tsx
-      AppStack.tsx
-      AuthNavigator.tsx
-      MainTabs.tsx
-      navigation.types.ts
-      screenNames.ts
-
-  features/
-    auth/
-      screens/
-      services/
-      store/
-      types/
-
-    profile/
-      screens/
-
-    analyses/
-      screens/
-
-  shared/
-    components/
-    lib/
-
-  store/
-    apiSlice.ts
-    hooks.ts
-    store.ts
-```
-
-### Navigation Model
-
-The app uses Redux auth state to choose the visible navigation tree:
-
-```txt
-Splash
-  -> if unauthenticated: AuthNavigator
-  -> if authenticated: AppStack
-```
-
-Signup sets `needsProfileSetup: true`, which routes authenticated users into the profile setup flow before the main tabs.
-
-Route names are centralized in:
-
-```txt
-mobile/src/app/navigation/screenNames.ts
-```
-
-### Redux Model
-
-The mobile app uses:
-
-- RTK Query for API calls
-- regular Redux slices for app/session state
-- persisted auth state only
-- unpersisted API cache
-- redux-logger in development
-
-Auth persistence stores:
-
-- `user`
-- `token`
-- `isAuthenticated`
-- `needsProfileSetup`
-
-## Backend Architecture
-
-```txt
-backend/src/
-  app.ts
-  server.ts
-
-  config/
-    env.ts
-    prisma.ts
-
-  middleware/
-    authMiddleware.ts
-    errorMiddleware.ts
-    validateRequest.ts
-
-  modules/
-    auth/
-    users/
-    profiles/
-    analyses/
-    ai/
-
-  utils/
-    ApiError.ts
-    asyncHandler.ts
-    logger.ts
-```
-
-The analysis flow is intentionally layered:
-
-```txt
-analysis.controller
-  -> analysis.service
-    -> buildJobAnalysisPrompt()
-    -> aiProvider.generateStructuredOutput()
-    -> parseAnalysisResponse()
-    -> save result with Prisma
-```
-
-This keeps the controller thin and makes the AI workflow testable, replaceable, and easier to debug.
-
-## Database Schema
-
-Core models:
-
-- `User`
-- `Profile`
-- `JobAnalysis`
-- `AnalysisStatus`
-
-The schema is defined in:
-
-```txt
-backend/prisma/schema.prisma
-```
-
-### Prisma Migration Workflow
-
-Whenever `backend/prisma/schema.prisma` changes, the database and generated Prisma client must be updated too.
-
-Use this flow for schema changes such as:
-
-- adding a new model/table
-- adding or removing a column
-- changing a relation
-- adding a new enum value
-- changing defaults or constraints
-
-From the backend folder:
-
-```bash
-cd backend
-npx prisma migrate dev --name descriptive_migration_name
-npx prisma generate
-npm run typecheck
-npm run build
-```
-
-Example migration names:
-
-```bash
-npx prisma migrate dev --name add_recruiter_contacts
-npx prisma migrate dev --name add_ghosted_analysis_status
-npx prisma migrate dev --name add_analysis_stats
-```
-
-What each step does:
-
-- `schema.prisma` defines the desired data model.
-- `prisma migrate dev` creates a migration file and applies it to the local database.
-- `prisma generate` updates the generated Prisma Client and TypeScript types.
-- `typecheck` and `build` confirm the backend code still matches the schema.
-
-If a migration SQL file is created manually, apply it and mark it as applied:
-
-```bash
-npx prisma db execute --file prisma/migrations/<migration_folder>/migration.sql --schema prisma/schema.prisma
-npx prisma migrate resolve --applied <migration_folder>
-```
-
-For local development, make sure PostgreSQL is running before applying migrations:
-
-```bash
-pg_isready -h localhost -p 5432
-```
-
-## API Endpoints
-
-### Auth
-
-```http
-POST /api/auth/register
-POST /api/auth/login
-GET  /api/auth/me
-```
-
-### Profile
-
-```http
-POST /api/profile
-GET  /api/profile/me
-PUT  /api/profile/me
-```
-
-### Analyses
-
-```http
-POST   /api/analyses
-GET    /api/analyses
-GET    /api/analyses/:id
-PATCH  /api/analyses/:id/status
-DELETE /api/analyses/:id
-```
-
-## AI Workflow
-
-The backend currently includes a mock AI provider so the full analysis pipeline can be exercised without external API keys.
-
-AI infrastructure lives in:
-
-```txt
-backend/src/modules/ai/
-```
-
-RoleFit-specific prompt and parsing logic lives in:
-
-```txt
-backend/src/modules/analyses/
-```
-
-The intended structured output includes:
+Instead of acting like a chatbot, the app compares a saved candidate profile against a role and returns structured decision cards:
 
 - fit score
 - role summary
@@ -312,53 +32,219 @@ The intended structured output includes:
 - missing skills
 - seniority signals
 - resume positioning advice
-- interview questions
-- outreach message
+- interview preparation questions
+- recruiter outreach message
 - next actions
 
-## Local Setup
+The portfolio message behind this project is simple:
+
+> I build AI-powered product workflows, not AI wrappers.
+
+## Demo
+
+The MVP is designed as a mobile-first workflow: profile context, role analysis, saved history, status tracking, and recurring skill-gap insights.
+
+[Watch the demo video](docs/demo/rolefit-demo.mp4)
+
+<p align="center">
+  <img src="docs/screenshots/dashboard.png" width="220" alt="RoleFit AI dashboard" />
+  <img src="docs/screenshots/new-analysis.png" width="220" alt="New analysis form" />
+  <img src="docs/screenshots/analysis-detail.png" width="220" alt="Analysis detail screen" />
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/profile.png" width="220" alt="Candidate profile screen" />
+  <img src="docs/screenshots/analyses-list.png" width="220" alt="Saved analyses list" />
+  <img src="docs/screenshots/top-missing-skills.png" width="220" alt="Top missing skills screen" />
+</p>
+
+## Core Features
+
+### Mobile App
+
+- First-launch intro flow
+- JWT-backed signup and login
+- Secure token storage with `react-native-keychain`
+- Candidate profile setup
+- Chip-based profile inputs for skills, industries, and target roles
+- New job analysis form
+- AI-generated analysis detail screen
+- Saved role analyses list
+- Status tracking: saved, applied, interviewing, rejected, offer, ghosted
+- Top missing skills chart
+- Copy actions for outreach, job URL, and job description
+- Loading, empty, and error states
+
+### Backend API
+
+- Express API written in TypeScript
+- PostgreSQL persistence through Prisma
+- JWT authentication middleware
+- Profile create/update/read flow
+- Job analysis persistence
+- AI provider abstraction
+- OpenAI provider integration
+- Structured prompt builder
+- AI response parser before database save
+- Analysis status transition rules
+- Aggregated missing-skill insights
+
+## Tech Stack
+
+| Area | Technology |
+| --- | --- |
+| Mobile | React Native, TypeScript, React Navigation |
+| State | Redux Toolkit, RTK Query, redux-persist, redux-logger |
+| Forms/UI | Custom mobile components, reducer-driven form state |
+| Backend | Node.js, Express, TypeScript |
+| Database | PostgreSQL, Prisma |
+| Auth | JWT, bcrypt, secure token storage |
+| AI | OpenAI provider behind an AI service layer |
+| Tooling | Postman collection, Prisma migrations, ESLint |
+
+## Architecture
+
+```txt
+rolefit_ai_mobile/
+  mobile/
+    src/
+      app/
+        navigation/
+      features/
+        auth/
+        profile/
+        analyses/
+      shared/
+        components/
+        lib/
+        state/
+      store/
+
+  backend/
+    src/
+      config/
+      middleware/
+      modules/
+        auth/
+        users/
+        profiles/
+        analyses/
+        ai/
+      utils/
+    prisma/
+      schema.prisma
+      migrations/
+
+  docs/
+    demo/
+    screenshots/
+```
+
+## AI Workflow
+
+The controller does not call the model directly. The backend keeps the AI workflow layered so it is easier to test, replace, and debug.
+
+```txt
+analysis.controller
+  -> analysis.service
+    -> get candidate profile
+    -> buildJobAnalysisPrompt()
+    -> aiProvider.generateText()
+    -> parseAnalysisResponse()
+    -> save structured result with Prisma
+```
+
+The AI receives structured context:
+
+```json
+{
+  "candidateProfile": {
+    "currentTitle": "Senior Full Stack Engineer",
+    "yearsExperience": 8,
+    "coreSkills": ["React Native", "React", "TypeScript", "Node.js"],
+    "industries": ["Fintech", "SaaS", "Marketplace Platforms"]
+  },
+  "job": {
+    "title": "Senior AI Product Engineer",
+    "company": "Northstar AI",
+    "description": "Full job description..."
+  }
+}
+```
+
+The backend expects structured analysis output, parses it, and stores the fields separately so the mobile app can render cards instead of one long AI paragraph.
+
+## API Endpoints
+
+### Auth
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `POST` | `/api/auth/register` | Create user account |
+| `POST` | `/api/auth/login` | Login and receive access token |
+| `GET` | `/api/auth/me` | Validate authenticated session |
+
+### Profile
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `POST` | `/api/profile` | Create candidate profile |
+| `GET` | `/api/profile/me` | Get current user's profile |
+| `PUT` | `/api/profile/me` | Update candidate profile |
+
+### Analyses
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `POST` | `/api/analyses` | Create AI role analysis |
+| `GET` | `/api/analyses` | List saved analyses |
+| `GET` | `/api/analyses/:id` | Get one analysis |
+| `DELETE` | `/api/analyses/:id` | Delete analysis |
+| `PATCH` | `/api/analyses/:id/status` | Update analysis status |
+| `GET` | `/api/analyses/missingskills` | Get top repeated missing skills |
+
+## Status Workflow
+
+Role statuses are intentionally constrained so the app behaves like a real job-search tracker.
+
+```txt
+SAVED
+  -> APPLIED
+  -> INTERVIEWING
+  -> REJECTED / OFFER / GHOSTED
+```
+
+The backend enforces allowed transitions, while the mobile UI only shows the next valid options.
+
+## Getting Started
 
 ### Prerequisites
 
-- Node.js
-- npm
-- Xcode and iOS Simulator
-- CocoaPods
+- Node.js 22+
 - PostgreSQL
+- Xcode and iOS Simulator for the mobile app
+- OpenAI API key if using the real provider
 
-This project was developed against local Homebrew PostgreSQL using the macOS user:
-
-```env
-DATABASE_URL="postgresql://zat_km@localhost:5432/rolefit_ai?schema=public"
-```
-
-Adjust that value if your local PostgreSQL user is different.
-
-## Backend Setup
+### Backend Setup
 
 ```bash
 cd backend
 npm install
 cp .env.example .env
+npm run prisma:migrate
 npm run prisma:generate
-npm run prisma:migrate -- --name init
 npm run build
 npm start
 ```
 
-The backend runs on:
+For local development:
 
-```txt
-http://localhost:4000
+```bash
+cd backend
+npm run dev
 ```
 
-Health check:
-
-```http
-GET /health
-```
-
-## Mobile Setup
+### Mobile Setup
 
 ```bash
 cd mobile
@@ -366,71 +252,85 @@ npm install
 cd ios
 pod install
 cd ..
-npm run ios
+npm start
 ```
 
-The mobile app currently calls:
-
-```txt
-http://localhost:4000/api
-```
-
-## Postman Collection
-
-The local Postman collection is available at:
-
-```txt
-postman/rolefit_ai.postman_collection.json
-```
-
-It includes requests for:
-
-- health check
-- register
-- login
-- authenticated user
-- profile create/update/get
-- analysis create/list/detail/status/delete
-
-The collection stores `token` and `analysisId` as variables after successful auth and analysis requests.
-
-## Validation
-
-Current checks used:
+In another terminal:
 
 ```bash
 cd mobile
-npx tsc --noEmit
-npm run lint
+npm run ios
 ```
+
+## Environment Variables
+
+Backend environment values live in `backend/.env`.
+
+```bash
+NODE_ENV=development
+PORT=4000
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/rolefit_ai?schema=public"
+JWT_SECRET="replace-this-with-a-long-random-development-secret"
+JWT_EXPIRES_IN="7d"
+AI_PROVIDER="mock"
+OPENAI_API_KEY=""
+OPENAI_MODEL="gpt-4o-mini"
+```
+
+Use `AI_PROVIDER="mock"` for local UI/backend testing without model cost. Use `AI_PROVIDER="openai"` when testing the real structured AI workflow.
+
+## Prisma Migration Workflow
+
+Whenever `backend/prisma/schema.prisma` changes, update the database and regenerate the Prisma client.
 
 ```bash
 cd backend
+npm run prisma:migrate -- --name descriptive_migration_name
+npm run prisma:generate
 npm run typecheck
 npm run build
 ```
 
-## Portfolio Roadmap
+Examples:
 
-This is Project 1 in a 2-month AI portfolio roadmap.
+```bash
+npm run prisma:migrate -- --name add_recruiter_contacts
+npm run prisma:migrate -- --name add_ghosted_analysis_status
+npm run prisma:migrate -- --name add_analysis_stats
+```
 
-The two-week MVP target is:
+This same workflow applies when adding a new table, adding a relation, changing an enum, or updating constraints.
 
-- authentication
-- candidate profile setup
-- job description analysis
-- AI-generated structured result
-- result screen
-- saved analysis history
-- clean README
-- screenshots
-- short demo video
-- LinkedIn build notes
+## What This Project Demonstrates
 
-## Product Principle
+- React Native product workflow design
+- Mobile-first AI UX with structured cards
+- Redux Toolkit and RTK Query architecture
+- Secure mobile auth session handling
+- Express API layering
+- Prisma/PostgreSQL persistence
+- AI provider abstraction
+- Prompt and parser separation
+- Backend-owned status transition rules
+- Product-minded portfolio storytelling
 
-Most AI tools stop at generated text.
+## Future Improvements
 
-RoleFit AI is designed around a different principle:
+- Add refresh token rotation and logout endpoint
+- Add AI response evaluation and regression tests
+- Add provider fallback and retry strategy
+- Add cost controls, caching, and usage limits for model calls
+- Add resume import as a later workflow, not V1 scope
+- Add richer analytics for missing skills over time
+- Add result-sharing and PDF export
+- Add automated mobile E2E tests
 
-> AI output should become structured, scannable, and actionable product workflow.
+## Repository
+
+This project is open for feedback from engineers, founders, recruiters, and product builders interested in mobile AI workflows and career-tech products.
+
+Issues, suggestions, and thoughtful PRs are welcome.
+
+```txt
+https://github.com/ZAT90/rolefit_ai_mobile
+```
